@@ -1,11 +1,37 @@
-import { useState } from 'react'
 import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
+import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
+
+let connection = new HubConnectionBuilder()
+  .withUrl("/api/vote")
+  .configureLogging(LogLevel.Debug)
+  .build();
+
+connection.on("ReceiveMessage", data => {
+    console.log("message: ", data.message);
+});
+
+connection.start()
+    .catch((e) => console.error("failed to start: ", e));
+
+const sendMessage = async () =>  {
+  if (connection.state === HubConnectionState.Connected) {
+    connection.send(
+      "SendMessage",
+      {
+        user: "Main",
+        message: "Voted"
+      }
+    )
+  }
+  else {
+    console.log(`State is ${connection.state.toString()}`)
+  }
+}
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
@@ -24,9 +50,9 @@ function App() {
         <button
           type="button"
           className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          onClick={sendMessage}
         >
-          Count is {count}
+          Send Message
         </button>
       </section>
 
