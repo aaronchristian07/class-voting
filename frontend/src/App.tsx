@@ -5,7 +5,7 @@ import './App.css'
 import { HubConnectionBuilder, HubConnectionState, LogLevel } from '@microsoft/signalr';
 
 let connection = new HubConnectionBuilder()
-  .withUrl("/api/vote")
+  .withUrl("/hubs/vote")
   .configureLogging(LogLevel.Debug)
   .build();
 

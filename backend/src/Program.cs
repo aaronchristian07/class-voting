@@ -20,6 +20,6 @@ builder.Services.AddSignalR();
 var app = builder.Build();
 
 app.MapGet("/", () => "Hello Bananas!");
-app.MapHub<VoteHub>("/vote");
+app.MapHub<VoteHub>("/hubs/vote");
 
 app.Run();
