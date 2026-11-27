@@ -1,4 +1,5 @@
 using System;
+using System.Net.WebSockets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
@@ -18,6 +19,8 @@ public record VoteRequestDto
 
 public class VoteHub : Hub
 {
+    static int[] votes = {0, 0};
+
     public async Task SendMessage(ChatMessage payload)
     {
         Console.WriteLine($"payload: {payload.user}, {payload.message}");
@@ -27,6 +30,21 @@ public class VoteHub : Hub
     public async Task CastVote(VoteRequestDto payload)
     {
         Console.WriteLine($"payload: {payload.vote}, {payload.desc}");
-        // await Clients.All.SendAsync("ReceiveMessage", payload);
+        updateVote(payload);
+        await PublishVote();
     }
+
+    private void updateVote(VoteRequestDto payload)
+    {
+        int index = (payload.vote.ToLowerInvariant() == "yes") ? 0 : 1;
+        votes[index]++;
+    }
+
+    public async Task PublishVote()
+    {
+        Console.WriteLine($"publishing votes: {votes[0]}, {votes[1]}");
+        await Clients.All.SendAsync("PublishVote", votes);
+    }
+
+    
 }

@@ -28,3 +28,9 @@ export const castVote = async (
     console.error(`[CastVote] State is ${connection.state.toString()}: Cannot send request`)
   }
 }
+
+// export const subscribeToVoteResults = async (
+//   connection: HubConnection,
+// ) => {
+  
+// }

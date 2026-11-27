@@ -1,4 +1,4 @@
-import type { HubConnection } from "@microsoft/signalr";
+import { HubConnectionState, type HubConnection } from "@microsoft/signalr";
 import { castVote } from "../services/websocket";
 import type { Vote } from "../types/types";
 import { useState } from "react";
@@ -8,10 +8,23 @@ interface VotingPageProps {
 }
 
 const VotingPage = ({connection}: VotingPageProps) => {
+    const [desc, setDesc] = useState<string>("");
+    const [votes, setVotes] = useState<number[]>([0, 0]);
+    
     const Yes: Vote = "Yes";
     const No: Vote = "No";
 
-    const [desc, setDesc] = useState<string>("");
+    // subscribeToVoteResult(connection);
+
+    if (connection.state === HubConnectionState.Connected) {
+        connection.on("PublishVote", data => {
+            console.log("Vote results received!");
+            setVotes(data);
+        });
+    } else {
+        console.log("have not received publish");
+    }
+
 
     return (
         <div>
@@ -24,6 +37,10 @@ const VotingPage = ({connection}: VotingPageProps) => {
             </div>
 
             <textarea name="vote-note" id="" onChange={(e) => setDesc(e.target.value)}></textarea>
+
+            <br />
+            <h4>Results</h4>
+            <p>Yes: {votes[0]} | No: {votes[1]}</p>
         </div>
     )
 }
