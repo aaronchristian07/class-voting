@@ -11,8 +11,8 @@ export default defineConfig({
   server: {
     proxy: {
         '/hubs': {
-        target: 'http://localhost:8000',
-        // changeOrigin: true,
+        target: 'http://localhost:5049',
+        changeOrigin: true,
         ws: true,
         // rewrite: (path) => path.replace(/^\/api/, ''),
       },

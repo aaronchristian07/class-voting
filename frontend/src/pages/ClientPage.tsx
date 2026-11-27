@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LoadingPage from "./LoadingPage";
 import VotingPage from "./VotingPage";
+import { establishWebsocket } from "../services/websocket";
 
 const State = {
     Voting: "Voting",
@@ -9,6 +10,8 @@ const State = {
 
 type State = typeof State[keyof typeof State];
 
+let connection = await establishWebsocket();
+    
 const ClientPage = () => {
     const [currentState, setCurrentState] = useState<State>(State.Loading);
 
@@ -27,7 +30,7 @@ const ClientPage = () => {
                     <LoadingPage/>
                 )
                 : (
-                    <VotingPage/>
+                    <VotingPage connection={connection} />
                 )
             }
 
