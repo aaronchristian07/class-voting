@@ -1,13 +1,13 @@
 import {
   createBrowserRouter
 } from "react-router";
-import VotePage from "../pages/VotePage";
 import App from "../App";
+import ClientPage from "../pages/ClientPage";
 
 const router = createBrowserRouter([
   {
     path: "/vote",
-    Component: VotePage,
+    Component: ClientPage,
   },
   {
     path: "/",
